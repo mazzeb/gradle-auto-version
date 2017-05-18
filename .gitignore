@@ -4,3 +4,4 @@ gradle-auto-version.iws
 gradle-auto-version.ipr
 out
 .gradle
+build
