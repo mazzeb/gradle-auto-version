@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'com.github.mazzeb.gradle-auto-version'
 
-version = "0.1-SNAPSHOT"
+//version = "0.1-SNAPSHOT"
 group = "com.github.mazzeb"
 
 buildscript {
@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     compile gradleApi()
+    compile "net.jcip:jcip-annotations:1.0"
 
     testCompile 'junit:junit:4.12'
 }
@@ -31,7 +32,7 @@ dependencies {
 pluginBundle {
     website = 'https://github.com/mazzeb/gradle-auto-version'
     vcsUrl = 'https://github.com/mazzeb/gradle-auto-version'
-    description = 'Automatically update version in version.properties'
+    description = 'Automatically update version in version.gradle'
     tags = ['autoversion']
 
     plugins {
