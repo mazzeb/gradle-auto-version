@@ -1,11 +1,15 @@
 package com.github.mazzeb.gradle.autoversion;
 
+import groovy.lang.Closure;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 import static java.lang.String.format;
 
@@ -18,25 +22,58 @@ public class AutoVersionPlugin implements Plugin<Project> {
 
     private Version version;
 
+
+
     @Override
     public void apply(Project project) {
         logger.debug("plugin apply");
         project.afterEvaluate(this::afterEvaluate);
-        project.getTasks().create("nextMajor", this::incMajor);
-        project.getTasks().create("nextMinor", this::incMinor);
-        project.getTasks().create("nextPatch", this::incPatch);
+        TaskContainer taskContainer = project.getTasks();
+
+        taskContainer.create("nextMajor", this::configureNextMajor);
+        taskContainer.create("nextMinor", this::configureNextMinor);
+        taskContainer.create("nextPatch", this::configureNextPatch);
     }
 
-    private void incMajor(Task task) {
+    private void configureNextMajor(Task task) {
+        task.setGroup("version");
+        task.setDescription("update version to next Major Release");
+        task.setActions(Arrays.asList(this::nextMajor));
+    }
+
+    private void configureNextMinor(Task task) {
+        task.setGroup("version");
+        task.setDescription("update version to next minor Release");
+        task.setActions(Arrays.asList(this::nextMinor));
+    }
+
+    private void configureNextPatch(Task task) {
+        task.setGroup("version");
+        task.setDescription("update version to next patch Release");
+        task.setActions(Arrays.asList(this::nextPatch));
+    }
+
+    private void nextMajor(Task task) {
+        logger.info("updating major version");
         version = version.nextMajor();
+        updateVersion(task.getProject(), version);
     }
 
-    private void incMinor(Task task) {
-
+    private void nextMinor(Task task) {
+        logger.info("updating major version");
+        version = version.nextMinor();
+        updateVersion(task.getProject(), version);
     }
 
-    private void incPatch(Task task) {
+    private void nextPatch(Task task) {
+        logger.info("updating major version");
+        version = version.nextPatch();
+        updateVersion(task.getProject(), version);
+    }
 
+    private void updateVersion(Project project, Version version) {
+        project.setVersion(version);
+        VersionFile.saveToFile(VERSION_FILE, version);
     }
 
     private void afterEvaluate(Project project) {
@@ -46,7 +83,7 @@ public class AutoVersionPlugin implements Plugin<Project> {
             readVersion();
             project.setVersion("0.1-SNAPSHOT");
         } else {
-            throw new GradleException("please specify version in version.gradle file and not in build.gradle");
+            throw new GradleException("please specify version in version.gradle file and remove it from build.gradle");
         }
         logger.debug("the version: " + project.getVersion());
     }
