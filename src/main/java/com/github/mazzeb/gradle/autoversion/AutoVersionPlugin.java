@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
+import static com.github.mazzeb.gradle.autoversion.VersionFile.readFromFile;
 import static java.lang.String.format;
 
 public class AutoVersionPlugin implements Plugin<Project> {
@@ -79,18 +80,10 @@ public class AutoVersionPlugin implements Plugin<Project> {
         Object existingVersion = project.getVersion();
         logger.debug(format("version before apply: '%s'", existingVersion.toString()));
         if (UNSPECIFIED.equals(existingVersion)) {
-            readVersion();
-            project.setVersion("0.1-SNAPSHOT");
+            project.setVersion(readFromFile(VERSION_FILE));
         } else {
             throw new GradleException("please specify version in version.gradle file and remove it from build.gradle");
         }
         logger.debug("the version: " + project.getVersion());
     }
-
-    private Version readVersion() {
-        version = VersionFile.readFromFile(VERSION_FILE);
-
-        return version;
-    }
-
 }
