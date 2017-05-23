@@ -2,9 +2,8 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: "com.gradle.plugin-publish"
-apply plugin: 'com.github.mazzeb.gradle-auto-version'
+apply plugin: 'com.github.mazzeb.auto-version'
 
-//version = "0.1-SNAPSHOT"
 group = "com.github.mazzeb"
 
 buildscript {
@@ -14,7 +13,7 @@ buildscript {
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-        classpath "com.github.mazzeb:gradle-auto-version:0.1-SNAPSHOT"
+        classpath "com.github.mazzeb:auto-version:0.1-SNAPSHOT"
     }
 }
 
@@ -37,8 +36,8 @@ pluginBundle {
 
     plugins {
         gradleAutoVersionPlugin {
-            id = 'com.github.mazzeb'
-            displayName = 'Gradle autoversion plugin'
+            id = 'com.github.mazzeb.auto-version'
+            displayName = 'A Gradle plugin to automatically update versions in version.gradle'
         }
     }
 }

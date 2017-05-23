@@ -1,6 +1,5 @@
 package com.github.mazzeb.gradle.autoversion;
 
-import groovy.lang.Closure;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
