@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-        classpath "com.github.mazzeb:auto-version:0.1-SNAPSHOT"
+        classpath "com.github.mazzeb:auto-version:0.1.1"
     }
 }
 

@@ -22,8 +22,6 @@ public class AutoVersionPlugin implements Plugin<Project> {
 
     private Version version;
 
-
-
     @Override
     public void apply(Project project) {
         logger.debug("plugin apply");
@@ -60,13 +58,13 @@ public class AutoVersionPlugin implements Plugin<Project> {
     }
 
     private void nextMinor(Task task) {
-        logger.info("updating major version");
+        logger.info("updating minor version");
         version = version.nextMinor();
         updateVersion(task.getProject(), version);
     }
 
     private void nextPatch(Task task) {
-        logger.info("updating major version");
+        logger.info("updating patch version");
         version = version.nextPatch();
         updateVersion(task.getProject(), version);
     }
@@ -80,7 +78,8 @@ public class AutoVersionPlugin implements Plugin<Project> {
         Object existingVersion = project.getVersion();
         logger.debug(format("version before apply: '%s'", existingVersion.toString()));
         if (UNSPECIFIED.equals(existingVersion)) {
-            project.setVersion(readFromFile(VERSION_FILE));
+            version = readFromFile(VERSION_FILE);
+            project.setVersion(version);
         } else {
             throw new GradleException("please specify version in version.gradle file and remove it from build.gradle");
         }
