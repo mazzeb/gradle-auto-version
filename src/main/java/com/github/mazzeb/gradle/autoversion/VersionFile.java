@@ -1,6 +1,8 @@
 package com.github.mazzeb.gradle.autoversion;
 
 import org.gradle.api.GradleException;
+import org.gradle.internal.impldep.com.google.gson.Gson;
+import org.gradle.internal.impldep.com.google.gson.GsonBuilder;
 
 import java.io.*;
 import java.util.Properties;
@@ -13,6 +15,11 @@ public class VersionFile {
     public static final String MINOR = "minor";
     public static final String PATCH = "patch";
     public static final String SNAPSHOT = "snapshot";
+
+    private Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Version.class, new VersionSerializer())
+            .registerTypeAdapter(Version.class, new VersionDeserializer())
+            .create();
 
     public static Version readFromFile(String fileName) {
         try (InputStream in = new FileInputStream(fileName)) {

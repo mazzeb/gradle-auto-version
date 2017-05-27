@@ -6,19 +6,21 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static com.github.mazzeb.gradle.autoversion.VersionFile.readFromFile;
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class AutoVersionPlugin implements Plugin<Project> {
 
     private static final String VERSION_FILE = "version.gradle";
     private static final String UNSPECIFIED = "unspecified";
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = getLogger(this.getClass());
 
     private Version version;
 
@@ -36,19 +38,19 @@ public class AutoVersionPlugin implements Plugin<Project> {
     private void configureNextMajor(Task task) {
         task.setGroup("version");
         task.setDescription("update version to next Major Release");
-        task.setActions(Arrays.asList(this::nextMajor));
+        task.setActions(singletonList(this::nextMajor));
     }
 
     private void configureNextMinor(Task task) {
         task.setGroup("version");
         task.setDescription("update version to next minor Release");
-        task.setActions(Arrays.asList(this::nextMinor));
+        task.setActions(singletonList(this::nextMinor));
     }
 
     private void configureNextPatch(Task task) {
         task.setGroup("version");
         task.setDescription("update version to next patch Release");
-        task.setActions(Arrays.asList(this::nextPatch));
+        task.setActions(singletonList(this::nextPatch));
     }
 
     private void nextMajor(Task task) {
