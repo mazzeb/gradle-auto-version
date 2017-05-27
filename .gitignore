@@ -1,7 +1,7 @@
-gradle-auto-version.iml
-gradle-auto-version.ips
-gradle-auto-version.iws
-gradle-auto-version.ipr
+*.iml
+*.ips
+*.iws
+*.ipr
 out
 .gradle
 build
