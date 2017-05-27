@@ -13,18 +13,20 @@ Include the plugin in your `build.gradle` like this:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.github.mazzeb:auto-version:0.1.1"
+        classpath "gradle.plugin.com.github.mazzeb:auto-version:0.2.0"
       }
     }
     
     apply plugin: "com.github.mazzeb.auto-version"
 
-Now remove the version from your build gradle and create a `version.gradle` file:
+Now remove the version from your build gradle and create a `version.json` file:
 
-    major=1
-    minor=3
-    patch=0
-    snapshot=false
+    {
+        "major": 1,
+        "minor": 3,
+        "patch": 0,
+        "label": "snapshot"
+    }
 
 When applied, these information are used to set the projects version. To avoid confusion you get an error if 
 the version is also specified in `build.gradle`.
