@@ -8,26 +8,25 @@ import static org.junit.Assert.*;
 public class VersionTest {
 
     @Test
-    public void shouldBuildSnapshotVersion() throws Exception {
+    public void shouldBuildVersionWithLabel() throws Exception {
         Version version = Version.versionBuilder()
                 .withMajor(1L)
                 .withMinor(4L)
                 .withPatch(0L)
-                .withSnapshot(true)
+                .withLabel("someLabel")
                 .build();
 
         String versionString = version.toString();
 
-        assertThat(versionString, is("1.4.0-SNAPSHOT"));
+        assertThat(versionString, is("1.4.0-someLabel"));
     }
 
     @Test
-    public void shouldBuildReleaseVersion() throws Exception {
+    public void shouldBuildVersionWithoutLabel() throws Exception {
         Version version = Version.versionBuilder()
                 .withMajor(2L)
                 .withMinor(1L)
                 .withPatch(3L)
-                .withSnapshot(false)
                 .build();
 
         String versionString = version.toString();
@@ -45,14 +44,14 @@ public class VersionTest {
     }
 
     @Test
-    public void shouldGetNextMajorSnapshot() throws Exception {
+    public void shouldGetNextMajorWithLabel() throws Exception {
         Version version = Version.versionBuilder()
                 .withMajor(1L)
                 .withMinor(4L)
                 .withPatch(0L)
                 .build();
 
-        Version nextMajor = version.nextMajor().asSnapshot();
+        Version nextMajor = version.nextMajor().withLabel("SNAPSHOT");
 
         assertThat(nextMajor.toString(), is("2.0.0-SNAPSHOT"));
 
@@ -66,7 +65,7 @@ public class VersionTest {
                 .withPatch(3L)
                 .build();
 
-        Version nextMajor = version.nextMajor().asRelease();
+        Version nextMajor = version.nextMajor();
 
         assertThat(nextMajor.toString(), is("2.0.0"));
     }
@@ -79,7 +78,7 @@ public class VersionTest {
                 .withPatch(2L)
                 .build();
 
-        Version nextMajor = version.nextMinor().asSnapshot();
+        Version nextMajor = version.nextMinor().withLabel("SNAPSHOT");
 
         assertThat(nextMajor.toString(), is("1.5.0-SNAPSHOT"));
 
@@ -93,7 +92,7 @@ public class VersionTest {
                 .withPatch(3L)
                 .build();
 
-        Version nextMajor = version.nextMinor().asRelease();
+        Version nextMajor = version.nextMinor();
 
         assertThat(nextMajor.toString(), is("1.5.0"));
     }
@@ -107,7 +106,7 @@ public class VersionTest {
                 .withPatch(1L)
                 .build();
 
-        Version nextMajor = version.nextPatch().asSnapshot();
+        Version nextMajor = version.nextPatch().withLabel("SNAPSHOT");
 
         assertThat(nextMajor.toString(), is("1.4.2-SNAPSHOT"));
 
@@ -121,7 +120,7 @@ public class VersionTest {
                 .withPatch(3L)
                 .build();
 
-        Version nextMajor = version.nextPatch().asRelease();
+        Version nextMajor = version.nextPatch();
 
         assertThat(nextMajor.toString(), is("1.4.4"));
     }

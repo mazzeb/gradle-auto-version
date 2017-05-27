@@ -22,7 +22,7 @@ public class VersionSerializerTest {
                 .withMajor(2L)
                 .withMinor(4L)
                 .withPatch(1L)
-                .withSnapshot(false)
+                .withLabel("someLabel")
                 .build();
         JsonElement serialize = testee.serialize(version, null, null);
 
@@ -30,7 +30,7 @@ public class VersionSerializerTest {
                 "  \"major\": 2,\n" +
                 "  \"minor\": 4,\n" +
                 "  \"patch\": 1,\n" +
-                "  \"snapshot\": false\n" +
+                "  \"label\": \"someLabel\"\n" +
                 "}", false);
     }
 }

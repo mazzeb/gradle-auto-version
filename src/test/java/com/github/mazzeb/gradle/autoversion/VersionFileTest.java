@@ -44,12 +44,12 @@ public class VersionFileTest {
                 .withMajor(1L)
                 .withMinor(6L)
                 .withPatch(2L)
-                .withSnapshot(false)
+                .withLabel("someLabel")
                 .build();
 
         testee.saveToFile(version);
         Version resultVersion = testee.readFromFile();
 
-        assertThat(resultVersion.toString(), is("1.6.2"));
+        assertThat(resultVersion.toString(), is("1.6.2-someLabel"));
     }
 }

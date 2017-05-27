@@ -19,8 +19,16 @@ public class VersionDeserializer implements JsonDeserializer<Version> {
                 .withMajor(safeGetLong(jsonObject.getAsJsonPrimitive(MAJOR)))
                 .withMinor(safeGetLong(jsonObject.getAsJsonPrimitive(MINOR)))
                 .withPatch(safeGetLong(jsonObject.getAsJsonPrimitive(PATCH)))
-                .withSnapshot(safeGetBoolean(jsonObject.getAsJsonPrimitive(SNAPSHOT)))
+                .withLabel(safeGetString(jsonObject.getAsJsonPrimitive(LABEL)))
                 .build();
+    }
+
+    private String safeGetString(JsonPrimitive primitive) {
+        if (primitive != null) {
+            return primitive.getAsString();
+        } else {
+            return null;
+        }
     }
 
     private Long safeGetLong(JsonPrimitive primitive) {
@@ -31,11 +39,4 @@ public class VersionDeserializer implements JsonDeserializer<Version> {
         }
     }
 
-    private boolean safeGetBoolean(JsonPrimitive primitive) {
-        if (primitive != null) {
-            return primitive.getAsBoolean();
-        } else {
-            return false;
-        }
-    }
 }

@@ -4,13 +4,13 @@ public class Version {
     private final Long major;
     private final Long minor;
     private final Long patch;
-    private final boolean snapshot;
+    private final String label;
 
     private Version(Builder builder) {
         major = builder.major;
         minor = builder.minor;
         patch = builder.patch;
-        snapshot = builder.snapshot;
+        label = builder.label;
     }
 
     public Long getMajor() {
@@ -25,8 +25,8 @@ public class Version {
         return patch;
     }
 
-    public boolean isSnapshot() {
-        return snapshot;
+    public String getLabel() {
+        return label;
     }
 
     public static Builder versionBuilder() {
@@ -38,7 +38,7 @@ public class Version {
         builder.major = copy.major;
         builder.minor = copy.minor;
         builder.patch = copy.patch;
-        builder.snapshot = copy.snapshot;
+        builder.label = copy.label;
         return builder;
     }
 
@@ -51,8 +51,10 @@ public class Version {
                 .append(".")
                 .append(patch.toString());
 
-        if (snapshot) {
-            versionString.append("-SNAPSHOT");
+        if (label != null && !"".equals(label)) {
+            versionString
+                    .append("-")
+                    .append(label);
         }
 
         return versionString.toString();
@@ -65,10 +67,10 @@ public class Version {
 
         Version version = (Version) o;
 
-        if (snapshot != version.snapshot) return false;
         if (major != null ? !major.equals(version.major) : version.major != null) return false;
         if (minor != null ? !minor.equals(version.minor) : version.minor != null) return false;
-        return patch != null ? patch.equals(version.patch) : version.patch == null;
+        if (patch != null ? !patch.equals(version.patch) : version.patch != null) return false;
+        return label != null ? label.equals(version.label) : version.label == null;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class Version {
         int result = major != null ? major.hashCode() : 0;
         result = 31 * result + (minor != null ? minor.hashCode() : 0);
         result = 31 * result + (patch != null ? patch.hashCode() : 0);
-        result = 31 * result + (snapshot ? 1 : 0);
+        result = 31 * result + (label != null ? label.hashCode() : 0);
         return result;
     }
 
@@ -101,15 +103,9 @@ public class Version {
                 .build();
     }
 
-    public Version asSnapshot() {
+    public Version withLabel(String label) {
         return versionBuilder(this)
-                .withSnapshot(true)
-                .build();
-    }
-
-    public Version asRelease() {
-        return versionBuilder(this)
-                .withSnapshot(false)
+                .withLabel(label)
                 .build();
     }
 
@@ -117,7 +113,7 @@ public class Version {
         private Long major = 0L;
         private Long minor = 0L;
         private Long patch = 0L;
-        private boolean snapshot = false;
+        private String label = "";
 
         private Builder() {
         }
@@ -137,8 +133,8 @@ public class Version {
             return this;
         }
 
-        public Builder withSnapshot(boolean val) {
-            snapshot = val;
+        public Builder withLabel(String val) {
+            label = val;
             return this;
         }
 

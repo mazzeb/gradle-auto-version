@@ -13,7 +13,7 @@ public class VersionSerializer implements JsonSerializer<Version> {
     public static final String MAJOR = "major";
     public static final String MINOR = "minor";
     public static final String PATCH = "patch";
-    public static final String SNAPSHOT = "snapshot";
+    public static final String LABEL = "label";
 
     @Override
     public JsonElement serialize(Version version,
@@ -23,7 +23,7 @@ public class VersionSerializer implements JsonSerializer<Version> {
         jsonObject.addProperty(MAJOR, version.getMajor());
         jsonObject.addProperty(MINOR, version.getMinor());
         jsonObject.addProperty(PATCH, version.getPatch());
-        jsonObject.addProperty(SNAPSHOT, version.isSnapshot());
+        jsonObject.addProperty(LABEL, version.getLabel());
         return jsonObject;
     }
 }

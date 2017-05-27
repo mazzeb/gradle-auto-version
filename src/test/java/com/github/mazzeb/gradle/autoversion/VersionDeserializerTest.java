@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 
 
 public class VersionDeserializerTest {
@@ -24,14 +25,14 @@ public class VersionDeserializerTest {
         given.add("major", new JsonPrimitive(1));
         given.add("minor", new JsonPrimitive(5));
         given.add("patch", new JsonPrimitive(3));
-        given.add("snapshot", new JsonPrimitive(true));
+        given.add("label", new JsonPrimitive("someLabel"));
 
         Version version = testee.deserialize(given, null, null);
 
         assertThat(version.getMajor(), is(1L));
         assertThat(version.getMinor(), is(5L));
         assertThat(version.getPatch(), is(3L));
-        assertThat(version.isSnapshot(), is(true));
+        assertThat(version.getLabel(), is("someLabel"));
     }
 
     @Test
@@ -45,6 +46,6 @@ public class VersionDeserializerTest {
         assertThat(version.getMajor(), is(2L));
         assertThat(version.getMinor(), is(0L));
         assertThat(version.getPatch(), is(1L));
-        assertThat(version.isSnapshot(), is(false));
+        assertThat(version.getLabel(), is(nullValue()));
     }
 }
