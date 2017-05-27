@@ -1,50 +1,44 @@
 package com.github.mazzeb.gradle.autoversion;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import org.gradle.api.GradleException;
-import org.gradle.internal.impldep.com.google.gson.Gson;
-import org.gradle.internal.impldep.com.google.gson.GsonBuilder;
 
-import java.io.*;
-import java.util.Properties;
-
-import static com.github.mazzeb.gradle.autoversion.Version.versionBuilder;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class VersionFile {
 
-    public static final String MAJOR = "major";
-    public static final String MINOR = "minor";
-    public static final String PATCH = "patch";
-    public static final String SNAPSHOT = "snapshot";
+    private final Gson GSON;
+    private final String fileName;
 
-    private Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Version.class, new VersionSerializer())
-            .registerTypeAdapter(Version.class, new VersionDeserializer())
-            .create();
+    private VersionFile(String fileName) {
+        this.fileName = fileName;
+        GSON = new GsonBuilder()
+                .registerTypeAdapter(Version.class, new VersionSerializer())
+                .registerTypeAdapter(Version.class, new VersionDeserializer())
+                .setPrettyPrinting()
+                .create();
+    }
 
-    public static Version readFromFile(String fileName) {
-        try (InputStream in = new FileInputStream(fileName)) {
-            Properties properties = new Properties();
-            properties.load(in);
+    public static VersionFile openVersionFile(String fileName) {
+        return new VersionFile(fileName);
+    }
 
-            return versionBuilder()
-                    .withMajor(Long.valueOf(properties.getProperty(MAJOR)))
-                    .withMinor(Long.valueOf(properties.getProperty(MINOR)))
-                    .withPatch(Long.valueOf(properties.getProperty(PATCH)))
-                    .withSnapshot(Boolean.valueOf(properties.getProperty(SNAPSHOT)))
-                    .build();
+    public Version readFromFile() {
+        try (JsonReader jsonReader = GSON.newJsonReader(new FileReader(fileName))) {
+            return GSON.fromJson(jsonReader, Version.class);
         } catch (IOException e) {
             throw new GradleException(e.getMessage());
         }
     }
 
-    public static void saveToFile(String fileName, Version version) {
-        Properties properties = new Properties();
-        properties.setProperty(MAJOR, version.getMajor().toString());
-        properties.setProperty(MINOR, version.getMinor().toString());
-        properties.setProperty(PATCH, version.getPatch().toString());
-        properties.setProperty(SNAPSHOT, version.isSnapshot()? "true" : "false");
-        try (Writer fileWriter = new FileWriter(fileName)){
-            properties.store(fileWriter, null);
+    public void saveToFile(Version version) {
+        try (JsonWriter writer = GSON.newJsonWriter(new FileWriter(fileName))) {
+            GSON.toJson(version, Version.class, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }

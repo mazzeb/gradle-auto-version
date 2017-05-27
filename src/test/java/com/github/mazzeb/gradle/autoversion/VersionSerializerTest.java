@@ -1,6 +1,6 @@
 package com.github.mazzeb.gradle.autoversion;
 
-import org.gradle.internal.impldep.com.google.gson.JsonElement;
+import com.google.gson.JsonElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;

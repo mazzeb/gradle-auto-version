@@ -7,22 +7,20 @@ import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import static com.github.mazzeb.gradle.autoversion.VersionFile.readFromFile;
+import static com.github.mazzeb.gradle.autoversion.VersionFile.openVersionFile;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class AutoVersionPlugin implements Plugin<Project> {
 
-    private static final String VERSION_FILE = "version.gradle";
+    private static final String VERSION_FILE = "version.json";
     private static final String UNSPECIFIED = "unspecified";
 
     private Logger logger = getLogger(this.getClass());
 
     private Version version;
+    private VersionFile versionFile;
 
     @Override
     public void apply(Project project) {
@@ -73,14 +71,15 @@ public class AutoVersionPlugin implements Plugin<Project> {
 
     private void updateVersion(Project project, Version version) {
         project.setVersion(version);
-        VersionFile.saveToFile(VERSION_FILE, version);
+        versionFile.saveToFile(version);
     }
 
     private void afterEvaluate(Project project) {
+        versionFile = openVersionFile(VERSION_FILE);
         Object existingVersion = project.getVersion();
         logger.debug(format("version before apply: '%s'", existingVersion.toString()));
         if (UNSPECIFIED.equals(existingVersion)) {
-            version = readFromFile(VERSION_FILE);
+            version = versionFile.readFromFile();
             project.setVersion(version);
         } else {
             throw new GradleException("please specify version in version.gradle file and remove it from build.gradle");

@@ -1,9 +1,10 @@
 package com.github.mazzeb.gradle.autoversion;
 
-import org.gradle.internal.impldep.com.google.gson.JsonElement;
-import org.gradle.internal.impldep.com.google.gson.JsonObject;
-import org.gradle.internal.impldep.com.google.gson.JsonSerializationContext;
-import org.gradle.internal.impldep.com.google.gson.JsonSerializer;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 

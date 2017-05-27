@@ -5,6 +5,7 @@ apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'com.github.mazzeb.auto-version'
 
 group = "com.github.mazzeb"
+//version = "0.2.0-SNAPSHOT"
 
 buildscript {
     repositories {
@@ -13,7 +14,7 @@ buildscript {
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-        classpath "com.github.mazzeb:auto-version:0.1.1"
+        classpath "com.github.mazzeb:auto-version:0.2.0"
     }
 }
 
@@ -24,7 +25,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile "net.jcip:jcip-annotations:1.0"
-//    compile "com.google.code.gson:gson:2.8.0"
+    compile "com.google.code.gson:gson:2.8.0"
 
     testCompile "junit:junit:4.12"
     testCompile "org.hamcrest:hamcrest-all:1.3"

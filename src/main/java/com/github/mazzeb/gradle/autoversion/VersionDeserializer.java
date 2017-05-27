@@ -1,6 +1,7 @@
 package com.github.mazzeb.gradle.autoversion;
 
-import org.gradle.internal.impldep.com.google.gson.*;
+
+import com.google.gson.*;
 
 import java.lang.reflect.Type;
 

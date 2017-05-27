@@ -1,8 +1,7 @@
 package com.github.mazzeb.gradle.autoversion;
 
-import org.gradle.internal.impldep.com.google.gson.JsonObject;
-import org.gradle.internal.impldep.com.google.gson.JsonPrimitive;
-import org.hamcrest.core.Is;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.junit.Before;
 import org.junit.Test;
 
