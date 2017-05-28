@@ -18,6 +18,10 @@ Include the plugin in your `build.gradle` like this:
     }
     
     apply plugin: "com.github.mazzeb.auto-version"
+    
+    autoversion {
+        versionFile: "version.json"
+    }
 
 Now remove the version from your build gradle and create a `version.json` file:
 
