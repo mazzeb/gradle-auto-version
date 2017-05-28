@@ -13,7 +13,7 @@ Include the plugin in your `build.gradle` like this:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.github.mazzeb:auto-version:0.2.0"
+        classpath "gradle.plugin.com.github.mazzeb:auto-version:0.2.1"
       }
     }
     
