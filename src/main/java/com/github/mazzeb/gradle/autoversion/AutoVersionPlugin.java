@@ -14,19 +14,22 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class AutoVersionPlugin implements Plugin<Project> {
 
-    private static final String VERSION_FILE = "version.json";
     private static final String UNSPECIFIED = "unspecified";
 
     private Logger logger = getLogger(this.getClass());
 
     private Version version;
     private VersionFile versionFile;
+    private AutoVersionConfig autoVersionConfig;
+
 
     @Override
     public void apply(Project project) {
         logger.debug("plugin apply");
         project.afterEvaluate(this::afterEvaluate);
         TaskContainer taskContainer = project.getTasks();
+
+        autoVersionConfig = project.getExtensions().create("autoversion", AutoVersionConfig.class);
 
         taskContainer.create("nextMajor", this::configureNextMajor);
         taskContainer.create("nextMinor", this::configureNextMinor);
@@ -75,15 +78,21 @@ public class AutoVersionPlugin implements Plugin<Project> {
     }
 
     private void afterEvaluate(Project project) {
-        versionFile = openVersionFile(VERSION_FILE);
+        logger.debug("opening version file: " + autoVersionConfig.getVersionFile());
+        versionFile = openVersionFile(autoVersionConfig.getVersionFile());
         Object existingVersion = project.getVersion();
-        logger.debug(format("version before apply: '%s'", existingVersion.toString()));
+        logger.debug(format("legacy project version: '%s'", existingVersion.toString()));
         if (UNSPECIFIED.equals(existingVersion)) {
-            version = versionFile.readFromFile();
+            try {
+                version = versionFile.readFromFile();
+            } catch (GradleException e) {
+                logger.info(format("Could not read version from %s", autoVersionConfig.getVersionFile()));
+            }
             project.setVersion(version);
         } else {
             throw new GradleException("please specify version in version.gradle file and remove it from build.gradle");
         }
-        logger.debug("the version: " + project.getVersion());
+        logger.debug("applied project version: " + project.getVersion());
+
     }
 }
