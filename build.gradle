@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-        classpath "com.github.mazzeb:auto-version:0.2.1-SNAPSHOT"
+        classpath "com.github.mazzeb:auto-version:0.2.1"
     }
 }
 
@@ -44,7 +44,7 @@ pluginBundle {
     plugins {
         gradleAutoVersionPlugin {
             id = 'com.github.mazzeb.auto-version'
-            displayName = 'A Gradle plugin to automatically update versions in version.gradle'
+            displayName = 'A Gradle plugin to automatically update versions in version.json'
         }
     }
 }
