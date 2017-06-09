@@ -1,9 +1,6 @@
 package com.github.mazzeb.gradle.autoversion;
 
-import org.gradle.api.GradleException;
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
-import org.gradle.api.Task;
+import org.gradle.api.*;
 import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 
@@ -31,27 +28,20 @@ public class AutoVersionPlugin implements Plugin<Project> {
 
         autoVersionConfig = project.getExtensions().create("autoversion", AutoVersionConfig.class);
 
-        taskContainer.create("nextMajor", this::configureNextMajor);
-        taskContainer.create("nextMinor", this::configureNextMinor);
-        taskContainer.create("nextPatch", this::configureNextPatch);
+        taskContainer.create("nextMajor",
+                configureTask("update version to next Major Release", this::nextMajor));
+        taskContainer.create("nextMinor",
+                configureTask("update version to next minor Release", this::nextMinor));
+        taskContainer.create("nextPatch",
+                configureTask("update version to next patch Release", this::nextPatch));
     }
 
-    private void configureNextMajor(Task task) {
-        task.setGroup("version");
-        task.setDescription("update version to next Major Release");
-        task.setActions(singletonList(this::nextMajor));
-    }
-
-    private void configureNextMinor(Task task) {
-        task.setGroup("version");
-        task.setDescription("update version to next minor Release");
-        task.setActions(singletonList(this::nextMinor));
-    }
-
-    private void configureNextPatch(Task task) {
-        task.setGroup("version");
-        task.setDescription("update version to next patch Release");
-        task.setActions(singletonList(this::nextPatch));
+    private Action<Task> configureTask(String description, Action<Task> action) {
+        return (task) -> {
+            task.setGroup("version");
+            task.setDescription(description);
+            task.setActions(singletonList(action));
+        };
     }
 
     private void nextMajor(Task task) {
@@ -70,6 +60,10 @@ public class AutoVersionPlugin implements Plugin<Project> {
         logger.info("updating patch version");
         version = version.nextPatch();
         updateVersion(task.getProject(), version);
+    }
+
+    private void readVersionInteractive(Task task) {
+
     }
 
     private void updateVersion(Project project, Version version) {
