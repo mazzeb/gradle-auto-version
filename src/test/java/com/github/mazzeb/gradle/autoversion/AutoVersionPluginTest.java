@@ -17,18 +17,5 @@ public class AutoVersionPluginTest {
 
         someProject.getPluginManager().apply(AutoVersionPlugin.class);
     }
-
-    @Test
-    public void shouldExecuteNextPatchTask() throws Exception {
-        GradleConnector connector = GradleConnector.newConnector();
-        connector.forProjectDirectory(new File("."));
-        ProjectConnection connection = connector.connect();
-        try {
-            BuildLauncher launcher = connection.newBuild();
-            launcher.forTasks("nextPatch");
-            launcher.run();
-        } finally {
-            connection.close();
-        }
-    }
 }
+
