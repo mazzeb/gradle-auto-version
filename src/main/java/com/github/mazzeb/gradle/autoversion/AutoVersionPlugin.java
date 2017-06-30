@@ -4,6 +4,7 @@ import org.gradle.api.*;
 import org.gradle.api.tasks.TaskContainer;
 import org.slf4j.Logger;
 
+import static com.github.mazzeb.gradle.autoversion.InteractiveVersionReader.interactiveVersionReader;
 import static com.github.mazzeb.gradle.autoversion.VersionFile.openVersionFile;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
@@ -34,6 +35,8 @@ public class AutoVersionPlugin implements Plugin<Project> {
                 configureTask("update version to next minor Release", this::nextMinor));
         taskContainer.create("nextPatch",
                 configureTask("update version to next patch Release", this::nextPatch));
+        taskContainer.create("setVersion",
+                configureTask("read version from commandline", this::readVersionInteractive));
     }
 
     private Action<Task> configureTask(String description, Action<Task> action) {
@@ -63,7 +66,11 @@ public class AutoVersionPlugin implements Plugin<Project> {
     }
 
     private void readVersionInteractive(Task task) {
+        InteractiveVersionReader interactiveVersionReader = interactiveVersionReader();
 
+        Version newVersion = interactiveVersionReader.readVersion("Set Version to", this.version);
+        System.console().printf("Read version: " + newVersion);
+        updateVersion(task.getProject(), newVersion);
     }
 
     private void updateVersion(Project project, Version version) {

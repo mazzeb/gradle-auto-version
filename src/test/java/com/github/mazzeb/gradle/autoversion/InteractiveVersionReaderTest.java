@@ -2,32 +2,31 @@ package com.github.mazzeb.gradle.autoversion;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.mockito.MockSettings;
+import org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker;
+import org.mockito.plugins.MockMaker;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.Console;
 import java.io.PrintStream;
 
 import static com.github.mazzeb.gradle.autoversion.InteractiveVersionReader.interactiveVersionReader;
 import static com.github.mazzeb.gradle.autoversion.Version.versionBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class InteractiveVersionReaderTest {
 
-    InputStream inputStream;
-    PrintStream printStream;
-    InteractiveVersionReader interactiveVersionReader;
+    private Console console;
+    private InteractiveVersionReader interactiveVersionReader;
 
     @Before
     public void setUp() throws Exception {
-        inputStream = new ByteArrayInputStream("1.4.2-SNAPSHOT".getBytes());
-        printStream = mock(PrintStream.class);
-        interactiveVersionReader = interactiveVersionReader(inputStream, printStream);
+        console = mock(Console.class);
+        interactiveVersionReader = interactiveVersionReader(console);
     }
 
     @Test
@@ -76,11 +75,13 @@ public class InteractiveVersionReaderTest {
 
     @Test
     public void shouldReadVersion() throws Exception {
-        String prompt = "please enter version";
+        String prompt = "Please enter version";
 
-        Version version = interactiveVersionReader.readVersion(prompt);
+        when(console.readLine(any())).thenReturn("1.4.2-SNAPSHOT");
 
-        verify(printStream, times(1)).print(eq(prompt));
+        Version version = interactiveVersionReader.readVersion(prompt, versionBuilder().build());
+
+        verify(console, times(1)).readLine(eq("Please enter version (0.0.0): "));
         assertThat(version, is(versionBuilder()
                 .withMajor(1L)
                 .withMinor(4L)

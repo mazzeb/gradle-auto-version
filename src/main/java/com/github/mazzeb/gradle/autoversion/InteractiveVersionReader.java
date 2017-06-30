@@ -1,32 +1,29 @@
 package com.github.mazzeb.gradle.autoversion;
 
+import java.io.Console;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
 public class InteractiveVersionReader {
 
-    private final InputStream inputStream;
-    private final PrintStream outputStream;
+    private final Console console;
 
-    private InteractiveVersionReader(InputStream inputStream, PrintStream outputStream) {
-        this.inputStream = inputStream;
-        this.outputStream = outputStream;
+    private InteractiveVersionReader(final Console console) {
+        this.console = console;
     }
 
     public static InteractiveVersionReader interactiveVersionReader() {
-        return new InteractiveVersionReader(System.in, System.out);
+        return new InteractiveVersionReader(System.console());
     }
 
-    public static InteractiveVersionReader interactiveVersionReader(InputStream inputStream, PrintStream outputStream) {
-        return new InteractiveVersionReader(inputStream, outputStream);
+    public static InteractiveVersionReader interactiveVersionReader(final Console console) {
+        return new InteractiveVersionReader(console);
     }
 
-    public Version readVersion(String prompt) {
-        Scanner scanner = new Scanner(inputStream);
-        outputStream.print(prompt);
-        String next = scanner.next();
-        return parseVersion(next);
+    public Version readVersion(String prompt, Version oldVersion) {
+        String line = console.readLine(String.format("%s (%s): ", prompt, oldVersion.toString()));
+        return parseVersion(line);
     }
 
     public Version parseVersion(String versionString) {
