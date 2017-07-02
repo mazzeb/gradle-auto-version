@@ -13,7 +13,7 @@ Include the plugin in your `build.gradle` like this:
         }
       }
       dependencies {
-        classpath "gradle.plugin.com.github.mazzeb:auto-version:0.2.1"
+        classpath "gradle.plugin.com.github.mazzeb:auto-version:0.3.0"
       }
     }
     
@@ -37,7 +37,8 @@ the version is also specified in `build.gradle`.
 
 The plugin also provides the following additional tasks:
 
-* `nextMajor` - increment major release and set minor and patch to 0.
-* `nextMinor` - increment minor and set patch to 0
-* `nextPatch` - increment patch 
+* `nextMajor`  - increment major release and set minor and patch to 0.
+* `nextMinor`  - increment minor and set patch to 0
+* `nextPatch`  - increment patch 
+* `setVersion` - read version string interactive 
 
